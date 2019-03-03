@@ -17,8 +17,6 @@ import com.hmarinoo.workshopmongo.domain.User;
 import com.hmarinoo.workshopmongo.dto.UserDTO;
 import com.hmarinoo.workshopmongo.services.UserService;
 
-
-
 @RestController
 @RequestMapping(value = "/users")
 public class UserResource {
@@ -33,24 +31,33 @@ public class UserResource {
 		return ResponseEntity.ok().body(listUserDTO);
 	}
 
-@RequestMapping(value="/{id}",method = RequestMethod.GET)
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<UserDTO> findById(@PathVariable String id) {
 		User user = userService.findById(id);
-		UserDTO userDTO =  new UserDTO(user);
+		UserDTO userDTO = new UserDTO(user);
 		return ResponseEntity.ok().body(userDTO);
 	}
-	
-@RequestMapping(method = RequestMethod.POST)
-public ResponseEntity<Void> insert(@RequestBody UserDTO userDTO) {
-	User user = userService.fromDTO(userDTO);
-	user = userService.insert(user);
-	URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
-	return ResponseEntity.created(uri).build();
-}
-@RequestMapping(value="/{id}",method = RequestMethod.DELETE)
-public ResponseEntity<Void> deleteById(@PathVariable String id) {
+
+	@RequestMapping(method = RequestMethod.POST)
+	public ResponseEntity<Void> insert(@RequestBody UserDTO userDTO) {
+		User user = userService.fromDTO(userDTO);
+		user = userService.insert(user);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
+		return ResponseEntity.created(uri).build();
+	}
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<Void> deleteById(@PathVariable String id) {
 		userService.deleteById(id);
-	return ResponseEntity.noContent().build();
-}
+		return ResponseEntity.noContent().build();
+	}
+	
+	@RequestMapping(value="/{id}",method = RequestMethod.PUT)
+	public ResponseEntity<Void> insert(@PathVariable String id,@RequestBody UserDTO userDTO) {
+		User user = userService.fromDTO(userDTO);
+		user.setId(id);
+		user = userService.updateUser(user);
+		return ResponseEntity.noContent().build();
+	}
 
 }
