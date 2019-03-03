@@ -47,5 +47,10 @@ public ResponseEntity<Void> insert(@RequestBody UserDTO userDTO) {
 	URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
 	return ResponseEntity.created(uri).build();
 }
+@RequestMapping(value="/{id}",method = RequestMethod.DELETE)
+public ResponseEntity<Void> deleteById(@PathVariable String id) {
+		userService.deleteById(id);
+	return ResponseEntity.noContent().build();
+}
 
 }
